@@ -5,7 +5,7 @@ import App from "./App";
 export const AppRoutes = ()=>{
     <Routes>
         <Route path="/" Component={App}></Route>
-        <React path='/:uuid' Component={App}></React>
+        <React path='/:noteid' Component={App}></React>
         <Route Component={null}></Route>
     </Routes>
 }
