@@ -20,6 +20,7 @@ function App() {
   const id = getPrarams()
   const [uuid , setUUID] = useState(id[0])
   const [textValue, setTextValue] = useState(''); 
+  const [theme , setTheme] = useState('dark')
   const navigate = useNavigate()
   const textValueRef = useRef('');
 
@@ -66,6 +67,23 @@ function App() {
     }
   }, [textValue]);
 
+  useEffect(()=>{
+    let ColorMap = {
+      'light':{
+        'bg':'#FFEFDC',
+        'scheme':'light'
+      },
+      'dark':{
+        'bg':'#242424',
+        'scheme':'light dark'
+      }
+    }
+    let newBgColor = ColorMap[theme]['bg']
+    let newColorScheme = ColorMap[theme]['scheme']
+    document.documentElement.style.setProperty('--background-color',newBgColor)
+    document.documentElement.style.setProperty('--color-scheme',newColorScheme)
+  },[theme])
+
 
   const axiosGenUUID = async ()=>{
     try {
@@ -94,9 +112,15 @@ function App() {
 
     setTextValue(event.target.value); 
   }
-
+  
+  function handleClick(){
+    theme=='dark'?setTheme('light') : setTheme('dark') 
+  }
   return (
     <>
+    <button onClick={handleClick}>
+    <span className='emoji'>{theme === "dark" ? "🌑" : "🌅"}</span>
+    </button>
     <textarea placeholder='Type here...'
     value={textValue}
     onChange={handleTextChange}  >     
