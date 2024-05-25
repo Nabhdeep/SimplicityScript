@@ -19,15 +19,18 @@ const getPrarams = ()=>{
 function App() {
   const id = getPrarams()
   const [uuid , setUUID] = useState(id[0])
-  const [textValue, setTextValue] = useState(''); 
   const [theme , setTheme] = useState('dark')
+  const [textValue, setTextValue] = useState(''); 
   const navigate = useNavigate()
   const textValueRef = useRef('');
 
- 
 
   useEffect(()=>{
-
+    let th = localStorage.getItem('themePreference')
+    if(th && ['dark' , 'light'].includes(th)) setTheme(th)
+  },[])
+ 
+  useEffect(()=>{
     if(uuid){
       console.log('=== uuid ==' , uuid);
       socket.emit('connect_notebook' , uuid)
@@ -36,17 +39,21 @@ function App() {
       axiosGenUUID()
     }
   } , [uuid])
-
+  
+  socket.on('init_text_broadcast' , (init_text)=>{
+    setTextValue(init_text)
+  })
+  
 
   useEffect(() => {
     socket.on('update_text_broadcast', (broadcast_text) => {
-      console.log('====== in comming broadcast =====');
+      // console.log('====== in comming broadcast =====');
       // {notebookid}:{text}
       const [notebookid , newText] = broadcast_text.split(':')
-      console.log(`==== newText ${newText}  |||| stateText ${textValueRef.current} ====`);
-      if( newText != textValueRef.current){
-        console.log('====== new text ======');
-        console.log(newText);
+      // console.log(`==== newText ${newText}  |||| stateText ${textValueRef.current} ==== ||||| notebookid ${notebookid} |||||| uuid ${uuid}`);
+      if(notebookid === uuid && newText != textValueRef.current){
+        // console.log('====== new text ======');
+        // console.log(newText);
         setTextValue(newText);
         textValueRef.current = newText;
       }
@@ -62,7 +69,7 @@ function App() {
   useEffect(() => {
     if (textValue != textValueRef.current) {
       socket.emit('update_text', `${uuid}:${socket.id}:${textValue}`);
-      console.log(` == text updated == ${textValue}`);
+      // console.log(` == text updated == ${textValue}`);
       textValueRef.current = textValue;
     }
   }, [textValue]);
@@ -103,7 +110,6 @@ function App() {
 
   useEffect(() => {
     if (uuid) {
-      console.log(uuid);
       navigate(`/${uuid}`)
     }
   }, [uuid]);
@@ -114,7 +120,9 @@ function App() {
   }
   
   function handleClick(){
-    theme=='dark'?setTheme('light') : setTheme('dark') 
+      const newTheme = theme === 'dark' ? 'light' : 'dark';
+      setTheme(newTheme);
+      localStorage.setItem('themePreference', newTheme);
   }
   return (
     <>
@@ -123,6 +131,7 @@ function App() {
     </button>
     <textarea placeholder='Type here...'
     value={textValue}
+    spellCheck='false'
     onChange={handleTextChange}  >     
     </textarea>
     </>
