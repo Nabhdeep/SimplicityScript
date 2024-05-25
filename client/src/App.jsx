@@ -47,7 +47,7 @@ function App() {
 
   useEffect(() => {
     socket.on('update_text_broadcast', (broadcast_text) => {
-      // console.log('====== in comming broadcast =====');
+      console.log('====== in comming broadcast =====');
       // {notebookid}:{text}
       const [notebookid , newText] = broadcast_text.split(':')
       // console.log(`==== newText ${newText}  |||| stateText ${textValueRef.current} ==== ||||| notebookid ${notebookid} |||||| uuid ${uuid}`);
