@@ -3,11 +3,12 @@ import './App.css'
 import {io} from 'socket.io-client'
 import { axiosInstance } from './axiosConfig'
 import { useNavigate  } from 'react-router-dom'
+import { defaultValues } from './defaultvalues'
 import axios from 'axios'
 
 
 
-const socket = io('http://localhost:9000' , {
+const socket = io(defaultValues.serverBaserUri , {
   reconnectionDelayMax:100000,
   withCredentials:true,
   transports: ['websocket', 'polling']
