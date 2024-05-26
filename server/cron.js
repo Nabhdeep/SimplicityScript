@@ -14,6 +14,8 @@ export const syncNotebooksToDB = async (notebookText)=>{
                     console.log(` == Notebook faced error while updating == ${error}`);
                 }
                 console.log(` == Notebook updated == ${notebookid}`);
+                let s = notebookText.delete(notebookid)
+                console.log(`== map cleared == ${s}`);
             }
         }
     } catch (error) {

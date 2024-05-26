@@ -79,9 +79,9 @@ function addToNotebookMap(key , value){
 
 async function handleSocket (socket , nodeBookMap , noteBookId) {
     addToNotebookMap(noteBookId , socket.id)
-    let data  = null
+    let data  = await checkDataInNotebook(noteBookId)
     //{uuid}:{socketID}:{value}
-    data = !data && notebookText.get(noteBookId)
+    data = !data ? notebookText.get(noteBookId) : data
     // console.log('GOT MAP DATA' , data);
     if(data){
         socket.emit('init_text_broadcast', `${data}`)
