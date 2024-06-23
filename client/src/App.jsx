@@ -5,6 +5,7 @@ import { axiosInstance } from './axiosConfig'
 import { useNavigate  } from 'react-router-dom'
 import { defaultValues } from './defaultvalues'
 import axios from 'axios'
+import MarkdownCustom from './MarkdownCustom'
 
 
 
@@ -24,6 +25,8 @@ function App() {
   const [textValue, setTextValue] = useState(''); 
   const navigate = useNavigate()
   const textValueRef = useRef('');
+  const [isMarkdown , setMarkDown] = useState(false)
+
 
 
   useEffect(()=>{
@@ -125,16 +128,30 @@ function App() {
       setTheme(newTheme);
       localStorage.setItem('themePreference', newTheme);
   }
+
+  function changeMarkdown (){
+    const mark = isMarkdown? false: true
+    setMarkDown(mark)
+  }
   return (
     <>
-    <button onClick={handleClick}>
-    <span className='emoji'>{theme === "dark" ? "🌑" : "🌅"}</span>
-    </button>
-    <textarea placeholder='Type here...'
-    value={textValue}
-    spellCheck='false'
-    onChange={handleTextChange}  >     
-    </textarea>
+    <div className='button-container'>
+      <button className='emoji' onClick={handleClick}>
+        <span>{theme === "dark" ? "🌑" : "🌅"}</span>
+      </button>
+  
+      <button className='markdown-option' onClick={changeMarkdown}>
+        <span>{isMarkdown ? "🇲" : "📝"}</span>
+      </button>
+    </div>
+    {isMarkdown ?
+    (<div className='text-container markdown'><MarkdownCustom val={textValue}></MarkdownCustom></div>) : 
+    (<textarea className='text-container textarea'
+      placeholder="Type here..."
+      value={textValue}
+      spellCheck="false"
+      onChange={handleTextChange}/>)
+    }
     </>
   )
 }

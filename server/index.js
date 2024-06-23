@@ -81,8 +81,8 @@ async function handleSocket (socket , nodeBookMap , noteBookId) {
     addToNotebookMap(noteBookId , socket.id)
     let data  = await checkDataInNotebook(noteBookId)
     //{uuid}:{socketID}:{value}
-    data = !data ? notebookText.get(noteBookId) : data
-    // console.log('GOT MAP DATA' , data);
+    let currData = notebookText.get(noteBookId) || 0
+    data = data.length<currData.length ? notebookText.get(noteBookId) : data
     if(data){
         socket.emit('init_text_broadcast', `${data}`)
     }
