@@ -82,7 +82,7 @@ async function handleSocket (socket , nodeBookMap , noteBookId) {
     let data  = await checkDataInNotebook(noteBookId)
     //{uuid}:{socketID}:{value}
     let currData = notebookText.get(noteBookId) || 0
-    data = (data && data.length<currData.length) ? notebookText.get(noteBookId) : data
+    data = (data && data.length<currData.length) ? data:notebookText.get(noteBookId)
     if(data){
         socket.emit('init_text_broadcast', `${data}`)
     }

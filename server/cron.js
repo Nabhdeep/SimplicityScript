@@ -36,6 +36,7 @@ export const notebookSyncCronJob = (notebookText)=>{
 export const checkDataInNotebook = async (notebookid) =>{
     try {
         let _notebook =  (await sbase.from('notebook').select().eq('notebookid',notebookid)).data
+        if (!_notebook) return  null
         return _notebook.length == 0 ? null : _notebook[0].data
     } catch (error) {
         console.log(`Error in CheckDataInNotebook ${error}`);
